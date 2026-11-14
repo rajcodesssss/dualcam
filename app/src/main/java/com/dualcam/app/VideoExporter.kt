@@ -57,7 +57,7 @@ object VideoExporter {
 
         fun lutEffect(): Effect? =
             if (filter.isIdentity) null
-            else SingleColorLut.createFromCube(Filters.buildCube(filter.matrix))
+            else SingleColorLut.createFromCube(Filters.buildCube(filter))
 
         val landscapeEffects = buildList<Effect> {
             landscapeCrop(w, h)?.let { add(it) }
