@@ -99,6 +99,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -118,10 +119,10 @@ import kotlin.math.sin
 // Look & feel
 // ---------------------------------------------------------------------------
 
-private val Accent = Color(0xFFD6FF3F)                       // electric lime
+private val Accent = Peach                       // peach glow
 private val RecRed = Color(0xFFFF3B30)
-private val Glass = Color(0xFF101010).copy(alpha = 0.55f)     // translucent dark panels
-private val GlassStrong = Color(0xFF141414).copy(alpha = 0.94f)
+private val Glass = Night.copy(alpha = 0.55f)     // translucent dark panels
+private val GlassStrong = Dusk.copy(alpha = 0.94f)
 private val Hairline = Color.White.copy(alpha = 0.14f)
 
 /** 16:9 frame me 9:16 box ki width (frame width ka hissa) = (9/16) * (9/16) */
@@ -326,13 +327,23 @@ fun CameraScreen() {
 
             // center: filter naam
             if (toastAlpha > 0.01f) {
-                Text(
-                    Filters.all[filterIndex].name,
-                    modifier = Modifier.align(Alignment.Center).graphicsLayer { alpha = toastAlpha },
-                    color = Color.White,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Column(
+                    Modifier.align(Alignment.Center).graphicsLayer { alpha = toastAlpha },
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        Filters.all[filterIndex].name,
+                        color = Color.White,
+                        fontSize = 28.sp,
+                        fontFamily = FontFamily.Serif,
+                        fontStyle = FontStyle.Italic
+                    )
+                    Text(
+                        Filters.all[filterIndex].tagline,
+                        color = Color.White.copy(alpha = 0.75f),
+                        fontSize = 13.sp
+                    )
+                }
             }
 
             // right rail: flip, record, last shot
@@ -698,14 +709,14 @@ private fun ExportOverlay(state: ExportState, onClose: () -> Unit, onOpen: (Uri)
             when (state) {
                 is ExportState.Working -> {
                     val landscapeDone = !state.stage.startsWith("Landscape")
-                    Text("Making your videos", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text("Making your videos", color = Color.White, fontSize = 22.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic)
                     Text("Keep the app open for a moment.", color = Color.White.copy(alpha = 0.6f), fontSize = 13.sp)
                     ProgressRow("Landscape 16:9", if (landscapeDone) 100 else state.percent)
                     ProgressRow("Portrait 9:16", if (landscapeDone) state.percent else 0)
                 }
 
                 is ExportState.Done -> {
-                    Text("Saved to your gallery", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text("Saved to your gallery", color = Color.White, fontSize = 22.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic)
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(18.dp, Alignment.CenterHorizontally),
@@ -719,7 +730,7 @@ private fun ExportOverlay(state: ExportState, onClose: () -> Unit, onOpen: (Uri)
                 }
 
                 is ExportState.Error -> {
-                    Text("Something went wrong", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                    Text("Something went wrong", color = Color.White, fontSize = 22.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Italic)
                     Text(state.message, color = Color.White.copy(alpha = 0.7f), fontSize = 13.sp)
                     AccentButton("Close", onClose)
                 }
@@ -799,7 +810,7 @@ private fun AccentButton(text: String, onClick: () -> Unit) {
             .padding(vertical = 13.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text, color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+        Text(text, color = Night, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
     }
 }
 
